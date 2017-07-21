@@ -4,7 +4,7 @@ This a a class project, where we asked to build bidding website using java entre
 
 Hibernate is not used.
 
-![screenshot](screenshots/Screen Shot 2017-04-24 at 10.23.59 PM.jpg)
+![screenshot](https://raw.githubusercontent.com/kh3dr0n/bidding-shop/master/screenshots/Screen%20Shot%202017-04-24%20at%2010.23.59%20PM.jpg)
 
 
 
