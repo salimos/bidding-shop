@@ -1,0 +1,308 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:H="http://java.sun.com/jsf/html"
+>
+
+    <h:head>
+        <title><ui:insert  name="title">Ventya</ui:insert></title>
+
+        <h:outputStylesheet name="css/bootstrap.css"/>
+        <h:outputStylesheet name="css/style.css"/>
+        <h:outputStylesheet name="css/dark.css"/>
+        <h:outputStylesheet name="css/font-icons.css"/>
+        <h:outputStylesheet name="css/animate.css"/>
+        <h:outputStylesheet name="css/magnific-popup.css"/>
+        <h:outputStylesheet name="css/responsive.css"/>
+        <h:outputStylesheet name="css/colors.css"/>
+        <h:outputStylesheet name="css/bootstrap-datetimepicker.min.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            .clearfix:after {
+                visibility: hidden;
+                display: block;
+                font-size: 0;
+                content: " ";
+                clear: both;
+                height: 0;
+            }
+            .clearfix { display: inline-block; }
+            /* start commented backslash hack \*/
+            * html .clearfix { height: 1%; }
+            .clearfix { display: block; }
+
+            .product-image > a, .product-image .slide a, .product-image img {
+                height: auto;
+            }
+
+            .toplinkbt{
+                display: block;
+                padding: 0 12px;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+                height: 44px;
+                color: #666;
+            }
+
+            .product-overlay a{
+                width: 100%;
+            }
+        </style>
+
+    </h:head>
+    <h:body class="stretched no-transition">
+        
+        <div id="wrapper" class="clearfix">
+            <!-- Top Bar
+            ============================================= -->
+            <div id="top-bar" class="hidden-xs">
+
+                <div class="container clearfix">
+
+                    <div class="col_half nobottommargin">
+
+                        <c:if test="#{authentification.connected eq true}">
+                            <strong>Bonjour <h:outputText value="#{userDao.one(authentification.id).nom}"/></strong>
+                        </c:if>
+
+                    </div>
+
+                    <div class="col_half col_last fright nobottommargin">
+
+                        <!-- Top Links
+                        ============================================= -->
+                        <div class="top-links">
+                            <ul>
+
+                                <c:if test="#{authentification.connected eq true}">
+
+                                    <c:if test="#{authentification.admin eq true}">
+                                        <li>
+                                            <a href="admin/categorie.xhtml">Administration</a>
+                                        </li>
+                                    </c:if>
+
+                                    <c:if test="#{authentification.admin eq false}">
+                                    <li>
+                                        <a href="compte.xhtml">Mon compte</a>
+                                    </li>
+                                    <li>
+                                        <a href="ajouterproduit.xhtml">Ajouter produit</a>
+                                    </li>
+                                    </c:if>
+
+                                    <li>
+
+                                        <h:form>
+                                            <h:commandLink action="#{authentification.logout}" value="Déconnection" styleClass="toplinkbt"></h:commandLink>
+                                        </h:form>
+                                    </li>
+
+                                </c:if>
+
+                                <c:if test="#{authentification.connected eq false}">
+                                    <li>
+                                        <a href="admin/categorie.xhtml">Administration</a>
+                                    </li>
+                                    <li><a href="#">Connection</a>
+                                        <div class="top-link-section">
+                                            <h:form id="top-login">
+
+
+                                                <div class="input-group" id="top-login-username">
+                                                    <span class="input-group-addon"><i class="icon-user"></i></span>
+                                                    <b:inputText placeholder="Adresse email" value="#{authentification.email}" required=""></b:inputText>
+
+                                                </div>
+                                                <div class="input-group" id="top-login-password">
+                                                    <span class="input-group-addon"><i class="icon-key"></i></span>
+                                                    <b:inputSecret placeholder="Mot de passe" value="#{authentification.password}" required=""></b:inputSecret>
+                                                </div>
+                                                <h:commandButton action="#{authentification.login}" value="Connecter"/>
+                                                <!--<button class="btn btn-danger btn-block" type="submit">Sign in</button>-->
+
+                                            </h:form>
+                                        </div>
+                                    </li>
+
+                                    <li><a href="inscription.xhtml">Inscription</a></li>
+
+                                </c:if>
+
+                            </ul>
+                        </div><!-- .top-links end -->
+
+                    </div>
+
+                </div>
+
+            </div><!-- #top-bar end -->
+
+            <!-- Header
+            ============================================= -->
+            <header id="header">
+
+                <div id="header-wrap">
+
+                    <div class="container clearfix">
+
+                        <div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
+
+                        <!-- Logo
+                        ============================================= -->
+                        <div id="logo">
+                            <a href="#{request.contextPath}/" class="standard-logo" data-dark-logo="images/logo-dark.png"><img src="images/logo.png" alt="Canvas Logo"/></a>
+                            <a href="#{request.contextPath}/" class="retina-logo" data-dark-logo="images/logo-dark@2x.png"><img src="images/logo@2x.png" alt="Canvas Logo"/></a>
+                        </div><!-- #logo end -->
+
+                        <!-- Primary Navigation
+                        ============================================= -->
+                        <nav id="primary-menu">
+
+                            <ul>
+                                <li class="current"><a href="#{request.contextPath}/"><div>Accueil</div></a>
+                                </li>
+
+
+
+                                <c:forEach var="cat" items="#{categorieDao.all()}">
+                                    <li><a href="#{request.contextPath}/?categorie_id=#{cat.id}"><div> <h:outputText value="#{cat.nom}"/> </div></a>
+                                        <ul>
+                                            <c:forEach var="souscat" items="#{sousCategorieDao.all(cat.id)}">
+                                                <li><a href="#{request.contextPath}/?souscategorie_id=#{souscat.id}"><div><h:outputText value="#{souscat.nom}"></h:outputText></div></a></li>
+                                            </c:forEach>
+                                        </ul>
+                                    </li>
+                                        
+                                </c:forEach>
+
+<!--                                <li><a href="#"><div>Contact</div><span>Get In Touch</span></a></li>-->
+                            </ul>
+
+                            <!-- Top Cart
+                            ============================================= -->
+
+
+
+
+                            <div id="top-cart">
+
+
+                                <c:set var="xpanier" value="#{Panier.list()}"/>
+                                <a href="#" id="top-cart-trigger"><i class="icon-shopping-cart"></i><span><h:outputText value="#{xpanier.size()}"/></span></a>
+                                <div class="top-cart-content">
+                                    <div class="top-cart-title">
+                                        <h4>Panier</h4>
+                                    </div>
+
+
+                                    <div class="top-cart-items">
+
+
+                                        <c:forEach var="item" items="#{xpanier}">
+
+                                            <c:set var="prd" value="#{produitDao.one(item.getProduit())}"/>
+
+                                            <div class="top-cart-item clearfix">
+                                                <div class="top-cart-item-image">
+                                                    <a href="produit.xhtml?id=#{prd.id}">
+                                                        <b:image value="#{prd.image1}"/>
+                                                    </a>
+                                                </div>
+                                                <div class="top-cart-item-desc">
+                                                    <a href="produit.xhtml?id=#{prd.id}"><h:outputText value="#{prd.nom}"/></a>
+                                                    <c:if test="#{produitDao.one(prd.id).type eq 1}">
+                                                    <br/><strong style="color:red">Enchére gagné</strong>
+                                                    </c:if>
+
+                                                    <span class="top-cart-item-price">  </span>
+                                                    <span class="top-cart-item-quantity">x <h:outputText value="#{item.getQnt()}"/></span>
+                                                </div>
+                                            </div>
+
+                                        </c:forEach>
+
+                                    </div>
+                                    <div class="top-cart-action clearfix">
+                                        <a href="panier.xhtml" class="button button-3d button-small nomargin fright">Voir carte</a>
+                                    </div>
+                                </div>
+                            </div><!-- #top-cart end -->
+
+
+
+                            <!-- Top Search
+
+
+                            ============================================= -->
+                            <div id="top-search">
+                                <a href="#{request.contextPath}/" id="top-search-trigger"><i class="icon-search3"></i><i class="icon-line-cross"></i></a>
+                                <form action="#" method="get">
+                                    <input type="text" name="search" class="form-control" value="" placeholder="Ecrire &amp; Frapper Enter.."/>
+                                </form>
+                            </div><!-- #top-search end -->
+
+
+
+                        </nav><!-- #primary-menu end -->
+
+                    </div>
+
+                </div>
+
+            </header><!-- #header end -->
+
+
+
+
+            <ui:insert name="content">Content</ui:insert>
+
+
+            <!-- Footer
+            ============================================= -->
+            <footer id="footer" class="dark">
+
+
+
+                <!-- Copyrights
+                ============================================= -->
+                <div id="copyrights">
+
+                    <div class="container clearfix">
+
+                        <div class="col_half">
+                            Copyrights copy; 2018 All Rights reserved<br/>
+                            <div class="copyright-links"><a href="#">Terms of Use</a> / <a href="#">Privacy Policy</a></div>
+                        </div>
+
+
+
+                    </div>
+
+                </div><!-- #copyrights end -->
+
+            </footer><!-- #footer end -->
+        
+</div>
+
+
+
+        <h:outputScript library = "js" name = "jquery.js"/>
+        <h:outputScript library = "js" name = "plugins.js"/>
+
+        <!-- Footer Scripts
+        ============================================= -->
+        <h:outputScript library = "js" name = "functions.js"/>
+        <h:outputScript library = "js" name = "moment.min.js"/>
+        <h:outputScript library = "js" name = "bootstrap-datetimepicker.min.js"/>
+
+
+    </h:body>
+</html>
+

@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./index.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:b="http://bootsfaces.net/ui">
+
+
+    <ui:define name="title">Produit</ui:define>
+    <ui:define name="content">
+
+
+        <section id="page-title">
+
+            <div class="container clearfix">
+                <h1></h1>
+                <span></span>
+
+            </div>
+
+        </section><!-- #page-title end -->
+
+        <section id="content">
+            <div class="content-wrap">
+
+                <b:container class="clearfix">
+                    <b:messages/>
+                    <div id="shop" class="shop grid-container clearfix" data-layout="fitRows">
+
+
+
+                        <c:forEach var="produit" items="#{produitDao.all(param)}">
+                            <div class="product clearfix">
+                                <div class="product-image">
+                                    <a href="produit.xhtml?id=#{produit.id}"><b:image value="#{produit.image1}" /></a>
+                                    <a href="produit.xhtml?id=#{produit.id}"><b:image value="#{produit.image2}" /></a>
+
+                                        <c:if test="#{produit.type eq 2}">
+                                            <div class="sale-flash">Immediat</div>
+                                        </c:if>
+                                        <c:if test="#{produit.type eq 1}">
+                                            <div class="sale-flash enchaire" data-date="#{produit.datefin}">Enchère</div>
+                                        </c:if>
+
+                                    <div class="product-overlay">
+                                        <c:if test="#{produit.type eq 2}">
+                                        <h:form>
+
+                                            <h:commandLink action="#{Panier.ajouter}"  styleClass="add-to-cart">
+                                                <i class="icon-shopping-cart"></i><span> Ajouter a Panier</span>
+                                                <f:param name="idprod" value="#{produit.id}"/>
+                                                <f:param name="qnt" value="1"/>
+                                            </h:commandLink>
+                                        </h:form>
+                                        </c:if>
+
+                                        <c:if test="#{produit.type eq 1}">
+                                            <a href="produit.xhtml?id=#{produit.id}" class="add-to-cart"><i class="icon-legal"></i><span> Participer à l'enchére</span></a>
+                                        </c:if>
+
+                                        <!--<a href="quickview.xhtml?id=#{produit.id}" class="item-quick-view" data-lightbox="ajax"><i class="icon-zoom-in2"></i><span> Quick View</span></a>-->
+                                    </div>
+                                </div>
+                                <div class="product-desc">
+                                    <div class="product-title"><h3><a href="produit.xhtml?id=#{produit.id}"><h:outputText value="#{produit.nom}"></h:outputText></a></h3></div>
+                                    <div class="product-price"><ins><h:outputText value="#{produit.prix}"/></ins></div>
+                                </div>
+                            </div>
+                        </c:forEach>
+
+
+                    </div>
+                </b:container>
+
+            </div>
+        </section>
+
+
+
+        <script type="text/javascript">
+            var counts = $(".enchaire");
+            setInterval(function() {
+                var now = new Date().getTime();
+
+                counts.each(function (key, val) {
+                    var countDownDate = new Date($(val).data('date')).getTime();
+                    var distance = countDownDate - now;
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+
+                    $(val).html(days + "j " + hours + "h " + minutes + "m " + seconds + "s");
+
+                    if (distance &lt; 0) {
+                        $(val).html("Expiré");
+                    }
+
+                });
+            },1000);
+
+        </script>
+    </ui:define>
+
+</ui:composition>

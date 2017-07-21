@@ -1,0 +1,5 @@
+
+5squid:S2068" Remove this hard-coded password.(ºè™≈
+nsquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(¨õÕˆ
+Ösquid:S1319"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(§Ø„Æ
+ñsquid:S1186"ÄAdd a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ß¶Àπ

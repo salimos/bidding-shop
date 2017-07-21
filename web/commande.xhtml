@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./index.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:b="http://bootsfaces.net/ui">
+
+
+    <ui:define name="title">Commende</ui:define>
+    <ui:define name="content">
+
+
+
+        <section id="page-title">
+
+            <div class="container clearfix">
+                <h1>Commande</h1>
+            </div>
+        </section>
+
+
+            <section id="content">
+
+                <div class="content-wrap">
+
+                    <div class="container clearfix">
+                        <h:form>
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <h3 class="">Adresse de livraison</h3>
+
+
+
+                                    <div class="nobottommargin">
+                                    <div class="row">
+                                        <div class="col-md-6">
+
+
+                                            <div class="col_half">
+                                                <label for="shipping-form-name">Nom:</label>
+                                                <b:inputText id="shipping-form-name" styleClass="sm-form-control" value="#{CommandeDao.nom}"/>
+                                            </div>
+
+                                            <div class="col_half col_last">
+                                                <label for="shipping-form-lname">Prenom:</label>
+                                                <b:inputText id="shipping-form-lname" styleClass="sm-form-control" value="#{CommandeDao.prenom}"/>
+                                            </div>
+
+                                            <div class="clear"></div>
+
+
+                                            <div class="col_full">
+                                                <label for="shipping-form-address">Adresse:</label>
+
+                                                <b:inputText id="shipping-form-address" styleClass="sm-form-control" value="#{CommandeDao.addr1}"/>
+                                            </div>
+
+                                            <div class="col_full">
+                                                <b:inputText id="shipping-form-address2" styleClass="sm-form-control" value="#{CommandeDao.addr2}"/>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6">
+
+                                            <div class="col_full">
+                                                <label for="shipping-form-city">Ville</label>
+                                                <b:inputText id="shipping-form-city" styleClass="sm-form-control" value="#{CommandeDao.ville}"/>
+                                            </div>
+
+                                            <div class="col_full">
+                                                <label for="shipping-form-message">Notes <small>*</small></label>
+                                                <b:inputTextarea styleClass="sm-form-control"  id="shipping-form-message" rows="6" cols="30" value="#{CommandeDao.notes}"/>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    </div>
+
+
+
+                            </div>
+                            <div class="clear bottommargin"></div>
+                            <div class="col-md-6">
+                                <div class="table-responsive clearfix">
+                                    <h4>Votre commande</h4>
+
+                                    <table class="table cart">
+                                        <thead>
+                                        <tr>
+                                            <th class="cart-product-thumbnail">&nbsp;</th>
+                                            <th class="cart-product-name">Produit</th>
+                                            <th class="cart-product-quantity">Quantité</th>
+                                            <th class="cart-product-subtotal">Totale</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <c:forEach var="item" items="#{xpanier}">
+
+                                        <c:set var="prd" value="#{produitDao.one(item.getProduit())}"/>
+                                            <tr class="cart_item">
+                                            <td class="cart-product-thumbnail">
+                                                <a href="produit.xhtml?id=#{prd.id}">
+                                                    <b:image width="64" height="64" value="#{prd.image1}"/>
+                                                </a>
+                                            </td>
+
+                                            <td class="cart-product-name">
+                                                <a href="produit.xhtml?id=#{prd.id}"><h:outputText value="#{prd.nom}"/></a>
+                                            </td>
+
+                                            <td class="cart-product-quantity">
+                                                <div class="quantity clearfix">
+                                                    1x<h:outputText value="#{item.getQnt()}"/>
+                                                </div>
+                                            </td>
+
+                                            <td class="cart-product-subtotal">
+                                                <span class="amount">#{ item.getQnt()* prd.prix }</span>
+                                            </td>
+                                        </tr>
+                                        </c:forEach>
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <h4>Panier</h4>
+
+                                    <table class="table cart">
+                                        <tbody>
+                                        <tr class="cart_item">
+                                            <td class="notopborder cart-product-name">
+                                                <strong>Totale</strong>
+                                            </td>
+
+                                            <td class="notopborder cart-product-name">
+                                                <span class="amount">
+                                                    <h:outputText value="#{Panier.total(xpanier,produitDao)}"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr class="cart_item">
+                                            <td class="cart-product-name">
+                                                <strong>Livraison</strong>
+                                            </td>
+
+                                            <td class="cart-product-name">
+                                                <span class="amount">Livraison gratuite</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="cart_item">
+                                            <td class="cart-product-name">
+                                                <strong>Total</strong>
+                                            </td>
+
+                                            <td class="cart-product-name">
+                                                <span class="amount color lead"><strong><h:outputText value="#{Panier.total(xpanier,produitDao)}"/></strong></span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                                <h:commandButton styleClass="button button-3d fright" value="Confirmer commande" action="#{CommandeDao.ajouter}">
+                                    <f:param value="#{Panier.total(xpanier,produitDao)}" name="totale"/>
+                                </h:commandButton>
+                            </div>
+                        </div>
+                        </h:form>
+
+                    </div>
+
+                </div>
+
+
+
+
+        </section>
+    </ui:define>
+</ui:composition>

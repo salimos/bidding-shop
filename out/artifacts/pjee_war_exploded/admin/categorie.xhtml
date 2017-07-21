@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      >
+    <body>
+        <ui:composition template="./adminLayout.xhtml">
+
+            <ui:define name="content">
+
+
+
+
+
+
+                    <b:row styleClass="show-grid">
+                        <b:column span="2" offset="10">
+                            <a id="atrigger" class="btn btn-primary" href="#amodal" data-toggle="modal"><i class="fa fa-plus"></i> Ajouter categorie</a>
+                        </b:column>
+                    </b:row>
+
+
+                <b:row style="margin-top: 20px">
+                        <b:dataTable value="#{categorieDao.all()}" var="cat">
+                            <b:dataTableColumn value="#{cat.nom}" />
+
+                            
+                            <b:dataTableColumn label="Sous categories">
+                                <h:form>
+                                    <b:commandButton value="Afficher sous categories" icon="plus" action="souscategorie">
+                                        <f:param name="id" value="#{cat.id}" /> 
+                                    </b:commandButton>
+                                </h:form>
+                            </b:dataTableColumn>
+                            
+                            <b:dataTableColumn label="Supprimer">
+                                <h:form>
+                                    <b:commandButton value="Supprimer" icon="trash" action="#{categorieDao.delete}">
+                                        <f:param name="categorieId" value="#{cat.id}" /> 
+                                    </b:commandButton>
+                                </h:form>
+                            </b:dataTableColumn>
+                            
+                        </b:dataTable>
+                    </b:row>
+
+
+
+                    <b:modal id="amodal" title="Ajouter une nouvelle categorie" styleClass="modalPseudoClass">
+                        <h:form>
+
+                            <b:inputText id="name" value="#{categorieDao.nom}" label="Enter label du categorie"
+                                         required="true" renderLabel="true"   />
+                            <h:commandButton action="#{categorieDao.Ajouter}" value="Ajouter" /> 
+                        </h:form>
+                        <f:facet name="footer">
+                            <b:button value="close" dismiss="modal" onclick="return false;"/>
+
+                        </f:facet>
+
+
+                    </b:modal>
+
+
+
+            </ui:define>
+        </ui:composition>
+    </body>
+
+
+
+
+
+
+
+</html>

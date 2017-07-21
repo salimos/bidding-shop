@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./index.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="content">
+
+
+        <section id="content">
+
+            <div class="content-wrap">
+
+                <div class="container clearfix">
+
+                    <div class="heading-block noborder">
+                        <h3><h:outputText value="#{userDao.one(authentification.id).getNom()}"/></h3>
+                    </div>
+
+
+                    <b:tabView activeIndex="0">
+                        <b:tab title="Mes produits">
+                            <b:dataTable var="produit" value="#{produitDao.allbyUser(authentification.id)}">
+                                <b:dataTableColumn label="Image" searchable="false">
+                                    <b:image value="#{produit.image1}" height="60px"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn value="#{produit.nom}"/>
+
+                                <b:dataTableColumn label="Type">
+                                    <h:outputText value="Enchére" rendered="#{produit.type eq 1}"/>
+                                    <br/>
+                                    <h:outputText value="Date fin : #{produit.datefin}" rendered="#{produit.type eq 1}">
+                                        <f:convertDateTime type="both" dateStyle="full"/>
+                                    </h:outputText>
+                                        <h:outputText value="Vente Immidiat" rendered="#{produit.type eq 2}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn value="#{produit.prix}"/>
+
+                                <b:dataTableColumn value="#{produit.qnt}" label="Quantité"/>
+                                <b:dataTableColumn value="#{produit.vendu}" label="Vente"/>
+
+                                <b:dataTableColumn label="Supprimer">
+                                    <h:form>
+                                        <b:commandButton value="Supprimer" icon="trash" action="#{produitDao.delete}">
+                                            <f:param name="idProd" value="#{produit.id}"/>
+                                        </b:commandButton>
+                                    </h:form>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="">
+                                    <a href="#{request.contextPath}/produit.xhtml?id=#{produit.id}" class="btn btn-success"><i class="fa fa-eye"></i> Visiter</a>
+                                </b:dataTableColumn>
+                            </b:dataTable>
+                        </b:tab>
+
+                        <b:tab title="Mes commandes">
+
+                            <b:dataTable var="comm" value="#{CommandeDao.allbyuser()}">
+
+                                <b:dataTableColumn value="#{comm.id}"/>
+                                <b:dataTableColumn label="Date de commande">
+                                    <h:outputText value="#{comm.date}">
+                                        <f:convertDateTime type="both" dateStyle="full"/>
+                                    </h:outputText>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn label="Produits de commande">
+                                    <ui:repeat value="#{CommandeDao.getProduits(comm.getId())}" var="item">
+                                        <b:row>
+                                            <b:column span="3">
+                                        <b:image value="#{produitDao.one(item.produit).image1}" width="50"/>
+                                            </b:column>
+                                            <b:column span="9">
+                                                <a href="produit.xhtml?id=#{item.produit}" ><h:outputText value="#{produitDao.one(item.produit).nom}"/></a>
+
+                                            </b:column>
+                                        </b:row>
+                                    </ui:repeat>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn value="#{comm.totale}"/>
+
+                            </b:dataTable>
+                        </b:tab>
+
+                        <b:tab title="Enchaires actifs">
+
+                            <b:dataTable var="produit" value="#{produitDao.activeEnchairebyUser(authentification.id)}">
+                                <b:dataTableColumn label="Image" searchable="false">
+                                    <b:image value="#{produit.image1}" height="60px"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn value="#{produit.nom}"/>
+                                <b:dataTableColumn label="Date fin enchaire">
+
+                                    <h:outputText value="#{produit.datefin}">
+                                        <f:convertDateTime type="both" dateStyle="full"/>
+                                    </h:outputText>
+
+                                </b:dataTableColumn>
+                                <b:dataTableColumn value="#{produit.prix}"/>
+                            </b:dataTable>
+
+                        </b:tab>
+
+                    </b:tabView>
+
+
+                </div>
+            </div>
+        </section>
+    </ui:define>
+
+
+</ui:composition>

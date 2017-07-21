@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:b="http://bootsfaces.net/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./adminLayout.xhtml">
+
+            <ui:define name="content">
+
+
+                <b:row style="margin-top: 20px">
+
+                    <b:dataTable var="produit" value="#{produitDao.all()}">
+                        <b:dataTableColumn label="Image" searchable="false">
+                            <b:image value="#{produit.image1}" height="60px"/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn value="#{produit.nom}" />
+                        <b:dataTableColumn value="#{produit.prix}" />
+
+                        <b:dataTableColumn label="Supprimer">
+                            <h:form>
+                                <b:commandButton value="Supprimer" icon="trash" action="#{produitDao.delete}">
+                                    <f:param name="idProd" value="#{produit.id}" />
+                                </b:commandButton>
+                            </h:form>
+                        </b:dataTableColumn>
+                    </b:dataTable>
+                </b:row>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

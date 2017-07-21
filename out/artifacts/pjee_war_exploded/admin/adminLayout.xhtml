@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="css/bootstrap.css"/>
+        <title>Facelets Template</title>
+    </h:head>
+
+    <h:body>
+
+        <b:navBar brand="Administration" brandHref="#" inverse="true">
+        <b:navbarLinks>
+            <b:navLink value="Categories" href="categorie.xhtml"></b:navLink>
+            <b:navLink value="Produits" href="produit.xhtml"></b:navLink>
+            <!--<b:navLink value="Ventes" href="vente.xhtml"></b:navLink>-->
+
+
+        </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Retour a site" href="#{request.contextPath}/"></b:navLink>
+                <li>
+                    <h:form>
+                        <h:commandLink value="Déconnection" action="#{authentification.logout}" styleClass="padding-top: 15px;padding-bottom: 15px;"/>
+                    </h:form>
+                </li>
+
+
+            </b:navbarLinks>
+        </b:navBar>
+
+        <b:container>
+            <ui:insert name="content">Content</ui:insert>
+        </b:container>
+
+    </h:body>
+
+</html>

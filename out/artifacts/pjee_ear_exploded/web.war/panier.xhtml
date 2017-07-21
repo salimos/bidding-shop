@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./index.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Panier</ui:define>
+    <ui:define name="content">
+
+
+        <section id="page-title">
+
+            <div class="container clearfix">
+                <h1>Panier</h1>
+            </div>
+
+        </section><!-- #page-title end -->
+
+
+        <section id="content">
+
+            <div class="content-wrap">
+
+                <div class="container clearfix">
+
+                    <div class="table-responsive bottommargin">
+
+
+                        <c:set var="xpanier" value="#{Panier.list()}"/>
+
+                        <table class="table cart">
+                            <thead>
+                            <tr>
+                                <th class="cart-product-remove">&nbsp;</th>
+                                <th class="cart-product-thumbnail">&nbsp;</th>
+                                <th class="cart-product-name">Product</th>
+                                <th class="cart-product-price">Unit Price</th>
+                                <th class="cart-product-quantity">Quantity</th>
+                                <th class="cart-product-subtotal">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                            <c:forEach var="item" items="#{xpanier}">
+
+                                <c:set var="prd" value="#{produitDao.one(item.getProduit())}"/>
+
+                                <tr class="cart_item">
+                                    <td class="cart-product-remove">
+                                        <h:form style="margin-bottom: 0">
+                                        <h:commandLink styleClass="remove" title="Supprimer ce produit" action="#{Panier.delete}" >
+                                            <i class="icon-trash2"></i>
+                                            <f:param name="idprod" value="#{prd.id}"/>
+                                        </h:commandLink>
+                                        </h:form>
+
+                                    </td>
+
+                                    <td class="cart-product-thumbnail">
+                                        <a href="produit.xhtml?id=#{prd.id}">
+                                            <b:image value="#{prd.image1}"/>
+                                        </a>
+                                    </td>
+
+                                    <td class="cart-product-name">
+                                        <a href="produit.xhtml?id=#{prd.id}"><h:outputText value="#{prd.nom}" /></a>
+                                    </td>
+
+                                    <td class="cart-product-price">
+                                        <span class="amount"><h:outputText value="#{prd.prix}" /></span>
+                                    </td>
+
+                                    <td class="cart-product-quantity">
+                                        <div class="quantity clearfix">
+                                            <input type="text" readonly="readonly" name="quantity" value="#{item.getQnt()}" class="qty"/>
+                                        </div>
+                                    </td>
+
+                                    <td class="cart-product-subtotal">
+                                        <span class="amount"><h:outputText value="#{ item.getQnt()* prd.prix }"/> </span>
+                                    </td>
+                                </tr>
+
+                            </c:forEach>
+
+
+                            <tr class="cart_item">
+                                <td colspan="6">
+                                    <div class="row clearfix">
+                                        <div class="col-md-4 col-xs-4 nopadding">
+
+                                        </div>
+                                        <div class="col-md-8 col-xs-8 nopadding">
+                                            <a href="commande.xhtml"
+                                               class="button button-3d notopmargin fright">Proceder à commande</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section><!-- #content end -->
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://java.sun.com/jsf/composite"
+                template="./index.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">Inscription</ui:define>
+
+    <ui:define name="content">
+
+        <section id="content">
+
+            <div class="content-wrap">
+
+                <div class="container clearfix">
+
+                    <b:messages/>
+
+                    <div class="col_one_third nobottommargin">
+
+                        <div class="well well-lg nobottommargin">
+                            <h:form id="login-form" styleClass="nobottommargin">
+
+
+
+                                <h3>Se connecter a votre compte</h3>
+
+                                <div class="col_full">
+                                    <label for="login-form-username">Email:</label>
+                                    <b:inputText id="login-form-username" styleClass="form-control" value="#{authentification.email}" required="true" requiredMessage="Email incorrect" validatorMessage="Email incorrect">
+                                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                    </b:inputText>
+                                    <!--<b:message  for="login-form-username" />-->
+                                </div>
+
+                                <div class="col_full">
+                                    <label for="login-form-password">Mot de passe:</label>
+
+                                    <b:inputSecret id="login-form-password" styleClass="form-control" value="#{authentification.password}" required="true" validatorMessage="Mot de passe incorrect" requiredMessage="Mot de passe incorrect">
+                                        <f:validateLength minimum="4"/>
+                                    </b:inputSecret>
+                                    <!--<b:message  for="login-form-password" />-->
+                                </div>
+
+                                <div class="col_full nobottommargin">
+
+                                    <h:commandButton value="Connecter" action="#{authentification.login}" styleClass="button button-3d nomargin" id="login-form-submit"/>
+                                </div>
+
+                            </h:form>
+                        </div>
+
+                    </div>
+
+                    <div class="col_two_third col_last nobottommargin">
+
+
+                        <h3>Vous n'avez pas de compte? Inscrire maintenant.</h3>
+
+
+                        <h:form styleClass="nobottommargin" id="register-form">
+
+
+                            <div class="col_half">
+                                <label for="register-form-name">Nom:</label>
+                                <b:inputText id="register-form-name" value="#{userDao.nom}" required="true" requiredMessage="Nom incorrect" validatorMessage="Nom incorrect">
+                                    <f:validateRegex pattern="^[a-zA-Z]+$" />
+                                </b:inputText>
+                            </div>
+
+                            <div class="col_half col_last">
+                                <label for="register-form-email">Prenom :</label>
+                                <b:inputText id="register-form-email" value="#{userDao.prenom}"  required="true" requiredMessage="Prenom incorrect" validatorMessage="Prenom incorrect">
+                                    <f:validateRegex pattern="^[a-zA-Z]+$" />
+                                </b:inputText>
+                            </div>
+
+                            <div class="clear"></div>
+
+                            <div class="col_half">
+                                <label for="register-form-username">Email :</label>
+                                <b:inputText id="register-form-username" value="#{userDao.email}" required="true" requiredMessage="Email non valide" validatorMessage="Email non valide">
+                                    <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                                </b:inputText>
+                            </div>
+
+                            <div class="col_half col_last">
+                                <label for="register-form-phone">Telephone :</label>
+                                <b:inputText id="register-form-phone" value="#{userDao.tel}" required="true" requiredMessage="Numero de tel invalide" validatorMessage="Numero de tel invalide">
+                                    <f:validateRegex pattern="^[0-9]+$" />
+                                </b:inputText>
+                            </div>
+
+                            <div class="clear"></div>
+
+                            <div class="col_half">
+                                <label for="register-form-password">Mot de passe:</label>
+                                <b:inputSecret id="register-form-password" value="#{userDao.password}" required="true" requiredMessage="Mot de pase doit etre superieur a 4 caractere" validatorMessage="Mot de pase doit etre superieur a 4 caractere">
+                                    <f:validateLength minimum="4"/>
+                                </b:inputSecret>
+                            </div>
+
+                            <div class="col_half col_last">
+                                <label for="register-form-repassword">Confirmer mot de passe:</label>
+                                <b:inputSecret id="register-form-repassword" value="#{userDao.password2}" required="true" requiredMessage="Confirmation de mot de pase doit correcte" validatorMessage="Confirmation de mot de pase doit correcte">
+                                    <f:validateLength minimum="4"/>
+                                </b:inputSecret>
+                            </div>
+
+                            <div class="clear"></div>
+
+                            <div class="col_full nobottommargin">
+
+                                <h:commandButton action="#{userDao.ajouter()}" styleClass="button button-3d button-black nomargin" value="S'inscrire" id="register-form-submit" />
+                            </div>
+
+                        </h:form>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section><!-- #content end -->
+
+
+    </ui:define>
+
+
+</ui:composition>

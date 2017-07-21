@@ -1,0 +1,197 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<h:body>
+    <c:set var="produit" value="#{produitDao.one(param['id'])}" scope="request"/>
+    <c:set var="souscat" value="#{sousCategorieDao.one(produit.idSousCat)}" scope="request"/>
+    <div class="single-product shop-quick-view-ajax  clearfix">
+
+        <div class="ajax-modal-title">
+            <h2><h:outputText value="#{produit.nom}"/></h2>
+        </div>
+
+        <div class="product modal-padding clearfix">
+
+            <div class="col_half nobottommargin">
+                <div class="product-image">
+                    <div class="fslider" data-pagi="false">
+                        <div class="flexslider">
+                            <div class="slider-wrap">
+
+
+                                <div class="slide">
+                                    <a href="#{produit.image1}" title="#{produit.nom} - Front View">
+                                        <b:image value="#{produit.image1}" tooltip="#{produit.nom}"/>
+                                    </a>
+                                </div>
+                                <div class="slide">
+                                    <a href="#{produit.image2}" title="#{produit.nom} - Side View">
+                                        <b:image value="#{produit.image2}" tooltip="#{produit.nom}"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col_half nobottommargin col_last product-desc">
+                <div class="product-price">Prix :
+                    <ins><h:outputText value="#{produit.prix}"/></ins>
+                </div>
+
+                <div class="clear"></div>
+                <div class="line"></div>
+
+                <!-- Product Single - Quantity & Cart Button
+                ============================================= -->
+
+
+                <c:if test="#{produit.type eq 2}">
+
+
+                    <c:if test="#{produit.qnt eq 0}">
+                        <h3>Produit non disponible</h3>
+                    </c:if>
+
+                <c:if test="#{produit.qnt gt 0}">
+                    <h:form styleClass="cart nobottommargin clearfix" includeViewParams="true">
+
+                        <h3>Quantité Disponible : <h:outputText value="#{produit.qnt}"/></h3>
+
+                        <div class="quantity clearfix">
+                            <input type="button" value="-" class="minus"/>
+                            <!--<input type="text" step="1" min="1" name="quantity" value="1" title="Qty" class="qty" size="4"/>-->
+                            <h:inputText value="#{Panier.qnt}" styleClass="qty" validatorMessage="Quantité doit etre inféreur ou egale à celle disponible">
+                                <f:validateLongRange maximum="#{produit.qnt}"></f:validateLongRange>
+                            </h:inputText>
+                            <input type="button" value="+" class="plus" data-max="#{produit.qnt}"/>
+                        </div>
+
+
+
+
+
+                        <h:commandLink action="#{Panier.ajouter}" styleClass="add-to-cart button nomargin"
+                                       value="Ajouter à panier">
+                            <f:param name="id" value="#{produit.id}"/>
+                            <f:param name="idprod" value="#{produit.id}"/>
+                            <!--<f:param name="qnt" value="1"/>-->
+                        </h:commandLink>
+
+                        <!--<h:commandButton>-->
+                        <!--<f:param value="#{produit.id}" name="idprod"/>-->
+                        <!--<f:param value="1" name="qnt"/>-->
+                        <!--<f:ajax />-->
+                        <!--</h:commandButton>-->
+                    </h:form>
+                </c:if>
+                </c:if>
+                <c:if test="#{produit.type eq 1}">
+
+
+                    <c:if test="#{produit.expired()}">
+                        <h4> Enchére expiré</h4>
+                    </c:if>
+                <c:if test="#{!produit.expired()}">
+                    <h4>Il vous reste : <strong class="enchaire" data-date="#{produit.datefin}"></strong></h4>
+
+                    <h5>Les derniers enchére :</h5>
+
+                    <ul>
+
+                        <c:forEach var="ench" items="#{EnchereDao.allByProduit(produit.id)}">
+                            <li>
+                                <strong><h:outputText value="#{ench.prix}"/></strong> par <h:outputText
+                                    value="#{userDao.one(ench.idUser).nom}"/>
+                            </li>
+                        </c:forEach>
+                    </ul>
+
+
+                    <c:if test="#{authentification.connected eq true}">
+                        <h:form styleClass="cart nobottommargin clearfix">
+
+
+                            <b:inputText value="#{EnchereDao.prix}" placeholder="Votre offre"
+                                         validatorMessage="Votre offre doit superieur à prix et les encheres"
+                                         label="Offre :">
+                                <f:validateLongRange
+                                        minimum="#{EnchereDao.max(produit,EnchereDao.allByProduit(produit.id))}"/>
+                            </b:inputText>
+                            <h:commandButton action="#{EnchereDao.ajouter}" value="Participer a l'enchaire"
+                                             styleClass="add-to-cart button nomargin">
+                                <f:param name="id" value="#{produit.id}"/>
+                                <f:param name="produitId" value="#{produit.id}"/>
+                            </h:commandButton>
+
+                        </h:form>
+
+                    </c:if>
+                    <c:if test="#{authentification.connected eq false}">
+
+                        <h5>Connecter vous pour participer à l'enchaire</h5>
+                        <a href="inscription.xhtml" class="add-to-cart button nomargin">Connection</a>
+
+                    </c:if>
+                </c:if>
+                </c:if>
+
+                <div class="clear"></div>
+                <div class="line"></div>
+                <p><h:outputText value="#{produit.description}"></h:outputText></p>
+
+                <div class="panel panel-default product-meta nobottommargin">
+                    <div class="panel-body">
+                        <span class="posted_in">Category: <a
+                                href="#{request.contextPath}/?souscategorie_id=#{souscat.id}" rel="tag"> <h:outputText
+                                value="#{souscat.nom}"/> </a>.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        var counts = $(".enchaire");
+        setInterval(function () {
+            var now = new Date().getTime();
+
+            counts.each(function (key, val) {
+                var countDownDate = new Date($(val).data('date')).getTime();
+                var distance = countDownDate - now;
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+
+                $(val).html(days + "j " + hours + "h " + minutes + "m " + seconds + "s");
+
+                if (distance &lt; 0) {
+                    $(val).html("Expiré");
+                }
+
+            });
+        }, 1000);
+
+        $(".plus").click(function () {
+            inp = $(this).parent().children("input[type=text]");
+            if(inp.val() != parseInt($(this).data('max')))
+                inp.val(parseInt(inp.val())+1);
+        });
+
+        $(".minus").click(function () {
+            inp = $(this).parent().children("input[type=text]");
+            if(inp.val() != '1')
+                inp.val(parseInt(inp.val())-1);
+        });
+
+    </script>
+</h:body>
+</html>
